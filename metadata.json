@@ -1,0 +1,6 @@
+{
+  "name": "MedCase Pro - Medical Case Management System",
+  "description": "Production-grade medical case management system for tracking surgical implant cases from draft to completion with role-based access control, dynamic dashboard analytics, REST API, and Laravel codebase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,163 @@
+{
+  "info": {
+    "_postman_id": "a9182374-98c1-4829-8734-821938172938",
+    "name": "MedCase Pro API - Jajal Medical Assignment",
+    "description": "Complete Postman collection for all 7 required REST API endpoints for the Medical Case Management System.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. POST /api/login (Public)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.success && jsonData.data && jsonData.data.token) {",
+              "    pm.collectionVariables.set('auth_token', jsonData.data.token);",
+              "    pm.test('Token saved to collection variable', function() {",
+              "        pm.expect(jsonData.data.token).to.be.a('string');",
+              "    });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@jajalmedical.com\",\n  \"password\": \"admin123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": ["{{base_url}}"],
+          "path": ["api", "login"]
+        }
+      }
+    },
+    {
+      "name": "2. POST /api/logout (Authenticated)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/logout",
+          "host": ["{{base_url}}"],
+          "path": ["api", "logout"]
+        }
+      }
+    },
+    {
+      "name": "3. GET /api/cases (Paginated List)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/cases?page=1&per_page=10&status=Planning",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cases"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "per_page", "value": "10" },
+            { "key": "status", "value": "Planning" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. POST /api/cases (Create Case - Admin Only)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"case_number\": \"CASE-5588\",\n  \"patient_reference\": \"PAT-99120\",\n  \"surgeon_name\": \"Dr. Robert Miller\",\n  \"implant_type\": \"Trabecular Titanium Acetabular Cup\",\n  \"status\": \"Planning\",\n  \"priority\": \"High\",\n  \"surgery_date\": \"2026-11-30\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/cases",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cases"]
+        }
+      }
+    },
+    {
+      "name": "5. GET /api/cases/:id (Case Details)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/cases/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cases", "1"]
+        }
+      }
+    },
+    {
+      "name": "6. PUT /api/cases/:id (Update Case - Admin Only)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"case_number\": \"CASE-0001\",\n  \"patient_reference\": \"PAT-84920\",\n  \"surgeon_name\": \"Dr. Robert Miller\",\n  \"implant_type\": \"Custom Titanium Cranial Plate (Revised Spec)\",\n  \"status\": \"Approved\",\n  \"priority\": \"High\",\n  \"surgery_date\": \"2026-10-25\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/cases/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cases", "1"]
+        }
+      }
+    },
+    {
+      "name": "7. DELETE /api/cases/:id (Delete Case - Admin Only)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/cases/25",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cases", "25"]
+        }
+      }
+    }
+  ]
+}
